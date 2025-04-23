@@ -45,12 +45,28 @@ else:
     with open('data/names.pkl', 'wb') as f:
         pickle.dump(names, f)
 
-if 'faces_data.pkl' not in os.listdir('data/'):
-    with open('data/faces_data.pkl', 'wb') as f:
+if 'faces.pkl' not in os.listdir('data/'):
+    with open('data/faces.pkl', 'wb') as f:
         pickle.dump(faces_data, f)
 else:
-    with open('data/faces_data.pkl', 'rb') as f:
+    with open('data/faces.pkl', 'rb') as f:
         faces=pickle.load(f)
     faces=np.append(faces, faces_data, axis=0)
-    with open('data/faces_data.pkl', 'wb') as f:
+    with open('data/faces.pkl', 'wb') as f:
         pickle.dump(faces, f)
+
+# Load names to check consistency
+with open('data/names.pkl', 'rb') as f:
+    names_check = pickle.load(f)
+    
+# Load faces to check consistency
+with open('data/faces.pkl', 'rb') as f:
+    faces_check = pickle.load(f)
+    
+# Validate that number of faces matches number of labels
+print(f"Total faces: {len(faces_check)}")
+print(f"Total labels: {len(names_check)}")
+
+if len(faces_check) != len(names_check):
+    print("WARNING: The number of faces does not match the number of labels!")
+    print("You may need to recreate your dataset to fix this issue.")
